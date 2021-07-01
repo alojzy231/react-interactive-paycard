@@ -52,9 +52,9 @@ export default function PaycardForm(){
                 </Form.Control>
                 </Form.Group>
 
-                <Form.Group  as={Col} controlId="formGridCW">
+                <Form.Group  as={Col} controlId="formGridCVV">
                 <Form.Label>CW</Form.Label>
-                <Form.Control type="number" placeholder="Enter CW" />
+                <Form.Control type="number" placeholder="Enter CVV" />
                 </Form.Group>
             </Row>
             <Row>
