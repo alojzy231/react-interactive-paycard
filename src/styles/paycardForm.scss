@@ -1,0 +1,29 @@
+.paycard-form{
+    color: black;
+
+    margin: 10px;
+    .row{
+        margin-top: 10px;
+    }
+
+    select {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: menulist;
+      
+      }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+
+    button{
+        width:90%;
+    }
+}

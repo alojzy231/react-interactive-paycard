@@ -1,7 +1,11 @@
+import './styles/app.css';
+
+import Paycard from './Paycard';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
+      <Paycard />
       
     </div>
   );
