@@ -13,16 +13,6 @@
   appearance: menulist;
 }
 
-.paycard-form input::-webkit-outer-spin-button,
-.paycard-form input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.paycard-form input[type=number] {
-  -moz-appearance: textfield;
-}
-
 .paycard-form button {
   width: 90%;
 }

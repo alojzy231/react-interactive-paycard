@@ -1,8 +1,12 @@
 const initialState = {
-    cardNumber : null,
+    cardNumber : '',
     cardName : '',
-    expirationDate : null,
-    CVV : null
+    expirationDate : {
+        year : '',
+        month : ''
+    },
+    CVV : '',
+    selectedInputField: ''
 }
 
 const paycardReducer = (state = initialState, action) => {
@@ -26,6 +30,11 @@ const paycardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 CVV : action.payload
+            }
+        case 'paycard/changeSelectedInputField':
+            return {
+                ...state,
+                selectedInputField : action.payload
             }
         default:
             return state

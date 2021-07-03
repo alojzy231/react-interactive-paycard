@@ -21,7 +21,14 @@ export const changeExpirationDate = date => {
 
 export const changeCVV = cvv => {
     return {
-        type : 'paycard/changeExpirationDate',
+        type : 'paycard/changeCVV',
         payload : cvv
+    }
+}
+
+export const changeSelectedInputField = field => {
+    return {
+        type : 'paycard/changeSelectedInputField',
+        payload : field
     }
 }
