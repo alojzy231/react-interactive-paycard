@@ -5,7 +5,7 @@ const initialState = {
         year : '',
         month : ''
     },
-    CVV : '',
+    cvv : '',
     selectedInputField: ''
 }
 
@@ -29,7 +29,7 @@ const paycardReducer = (state = initialState, action) => {
         case 'paycard/changeCVV':
             return {
                 ...state,
-                CVV : action.payload
+                cvv : action.payload
             }
         case 'paycard/changeSelectedInputField':
             return {

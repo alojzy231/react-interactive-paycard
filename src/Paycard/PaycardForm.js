@@ -1,17 +1,22 @@
 import '../styles/paycardForm.css';
 
+import { useState } from 'react';
 import { Form, Col, Row, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeCardNumber, changeCardName, changeExpirationDate, changeCVV, changeSelectedInputField } from '../Actions/PaycardActions';
 
-export default function PaycardForm(){
-    const identificators = {
+export const identificators = {
         cardNumber : 'cardNumber',
         cardName : 'cardName',
         expirationMonth : 'expirationMonth',
         expirationYear : 'expirationYear',
         cvv : 'cvv'
     }
+
+
+export default function PaycardForm(){
+    const [validated, setValidated] = useState(false);
+
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
     const paycardInformation = useSelector(state => state.paycard);
@@ -39,14 +44,18 @@ export default function PaycardForm(){
     }
 
     const handleCardNumberChange = ({target}) =>{
-        if(validateNumberInput(target.value[target.value.length-1]) 
-            && target.value.length <= 12){
+        if((validateNumberInput(target.value[target.value.length-1]) 
+            && target.value.length <= 16)
+            || target.value.length === 0){
             dispatch(changeCardNumber(target.value));
         }
     }
 
     const handleCardNameChange = ({target}) =>{
-        dispatch(changeCardName(target.value));
+        if(target.value.length < 25){
+            dispatch(changeCardName(target.value));
+        }
+        
     }
 
     const handleExpirationDateChange = (month=paycardInformation.expirationDate.month,
@@ -64,8 +73,9 @@ export default function PaycardForm(){
 
     const handleCVVChange = ({target}) =>{
         
-        if(validateNumberInput(target.value[target.value.length-1]) 
-            && target.value.length <= 3){
+        if((validateNumberInput(target.value[target.value.length-1]) 
+        && target.value.length <= 4)
+        || target.value.length === 0){
             dispatch(changeCVV(target.value));
         }
         
@@ -73,20 +83,49 @@ export default function PaycardForm(){
 
     const handleSubmit = (e) =>{
         e.preventDefault();
+        setValidated(true);
+            alert("Action!");
+        
+        
+    }
+
+    const checkForErrors = (id) => {
+        const {cardNumber, cardName, expirationDate, cvv} = paycardInformation;
+        if(id === 'cardNumber' && cardNumber.length === 16){
+            return false
+        }else if(id === 'cardName' && cardName.length !== 0){
+            return false;
+        }else if(id === 'expirationMonth' && expirationDate.month){
+            return false;
+        }else if(id === 'expirationYear' && expirationDate.year){
+            return false;
+        }else if(id === 'cvv' && cvv.length === 4){
+            return false;
+        }
+        return true;
     }
 
     return (
-        <Form className="paycard-form">
+        <Form 
+            className="paycard-form"
+            noValidate
+            validated={validated}
+        >
             <Row>
                 <Form.Group  as={Col} controlId={identificators.cardNumber}>
                 <Form.Label>Card Number</Form.Label>
                 <Form.Control
                     type="text" 
+                    required
                     placeholder="Enter card number" 
                     onChange={handleCardNumberChange}
                     value={paycardInformation.cardNumber}
                     onFocus={handleSelectedInputFieldChange}
+                    isInvalid={checkForErrors('cardNumber')}
                     />
+                <Form.Control.Feedback type="invalid">
+                  Enter proper 16-digits long card number.
+                </Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row>
@@ -94,10 +133,16 @@ export default function PaycardForm(){
                 <Form.Label>Card Name</Form.Label>
                 <Form.Control 
                     type="text" 
+                    required
                     placeholder="Enter card name" 
+                    value={paycardInformation.cardName}
                     onChange={handleCardNameChange}
                     onFocus={handleSelectedInputFieldChange}
+                    isInvalid={checkForErrors('cardName')}
                     />
+                <Form.Control.Feedback type="invalid">
+                  Enter proper name of a card holder.
+                </Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row>
@@ -106,37 +151,50 @@ export default function PaycardForm(){
                 <Form.Label>Expiration Date</Form.Label>
                 <Form.Control 
                     as="select" 
-                    defaultValue="Month"
+                    required
                     onChange={handleExpirationMonthChange}
                     onFocus={handleSelectedInputFieldChange}
+                    isInvalid={checkForErrors('expirationMonth')}
                     >  
-                    <option disabled>Month</option>
-                    {months.map((month, index) => <option key={index}>{month}</option>)}
+                    <option disabled value="" selected>Month</option>
+                    {months.map((month, index) => <option key={index}  value={month}>{month}</option>)}
                 </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Select a month.
+                </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} controlId={identificators.expirationYear}>
                 <Form.Label>&nbsp;</Form.Label>
                 <Form.Control 
                     as="select" 
-                    defaultValue="Year"
+                    required
                     onChange={handleExpirationYearChange}
                     onFocus={handleSelectedInputFieldChange}
+                    isInvalid={checkForErrors('expirationYear')}
                     >
-                    <option disabled>Year</option>
-                    {years.map((year, index) => <option key={index}>{year}</option>)}
+                    <option disabled value="" selected>Year</option>
+                    {years.map((year, index) => <option key={index} value={year}>{year}</option>)}
                 </Form.Control>
+                <Form.Control.Feedback type="invalid">
+                  Select a year.
+                </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group  as={Col} controlId={identificators.cvv}>
                 <Form.Label>CVV</Form.Label>
                 <Form.Control 
                     type="text" 
+                    required
                     placeholder="Enter CVV" 
                     onChange={handleCVVChange}
-                    value={paycardInformation.CVV}
+                    value={paycardInformation.cvv}
                     onFocus={handleSelectedInputFieldChange}
+                    isInvalid={checkForErrors('cvv')}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Enter CVV number.
+                </Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row>
