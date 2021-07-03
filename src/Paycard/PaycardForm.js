@@ -15,7 +15,7 @@ export const identificators = {
 
 
 export default function PaycardForm(){
-    const [validated, setValidated] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
@@ -83,10 +83,17 @@ export default function PaycardForm(){
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-        setValidated(true);
-            alert("Action!");
-        
-        
+        setSubmitted(true);
+
+        if(!checkForErrors('cardNumber')
+            && !checkForErrors('cardName')
+            && !checkForErrors('expirationMonth')
+            && !checkForErrors('expirationYear')
+            && !checkForErrors('cvv')){
+                //Form is validated and ready to be sent
+                
+                alert("Action!");
+            }
     }
 
     const checkForErrors = (id) => {
@@ -108,8 +115,6 @@ export default function PaycardForm(){
     return (
         <Form 
             className="paycard-form"
-            noValidate
-            validated={validated}
         >
             <Row>
                 <Form.Group  as={Col} controlId={identificators.cardNumber}>
@@ -121,7 +126,7 @@ export default function PaycardForm(){
                     onChange={handleCardNumberChange}
                     value={paycardInformation.cardNumber}
                     onFocus={handleSelectedInputFieldChange}
-                    isInvalid={checkForErrors('cardNumber')}
+                    isInvalid={submitted && checkForErrors('cardNumber')}
                     />
                 <Form.Control.Feedback type="invalid">
                   Enter proper 16-digits long card number.
@@ -138,7 +143,7 @@ export default function PaycardForm(){
                     value={paycardInformation.cardName}
                     onChange={handleCardNameChange}
                     onFocus={handleSelectedInputFieldChange}
-                    isInvalid={checkForErrors('cardName')}
+                    isInvalid={submitted && checkForErrors('cardName')}
                     />
                 <Form.Control.Feedback type="invalid">
                   Enter proper name of a card holder.
@@ -154,7 +159,7 @@ export default function PaycardForm(){
                     required
                     onChange={handleExpirationMonthChange}
                     onFocus={handleSelectedInputFieldChange}
-                    isInvalid={checkForErrors('expirationMonth')}
+                    isInvalid={submitted && checkForErrors('expirationMonth')}
                     >  
                     <option disabled value="" selected>Month</option>
                     {months.map((month, index) => <option key={index}  value={month}>{month}</option>)}
@@ -171,7 +176,7 @@ export default function PaycardForm(){
                     required
                     onChange={handleExpirationYearChange}
                     onFocus={handleSelectedInputFieldChange}
-                    isInvalid={checkForErrors('expirationYear')}
+                    isInvalid={submitted && checkForErrors('expirationYear')}
                     >
                     <option disabled value="" selected>Year</option>
                     {years.map((year, index) => <option key={index} value={year}>{year}</option>)}
@@ -190,7 +195,7 @@ export default function PaycardForm(){
                     onChange={handleCVVChange}
                     value={paycardInformation.cvv}
                     onFocus={handleSelectedInputFieldChange}
-                    isInvalid={checkForErrors('cvv')}
+                    isInvalid={submitted && checkForErrors('cvv')}
                 />
                 <Form.Control.Feedback type="invalid">
                   Enter CVV number.
