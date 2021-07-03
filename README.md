@@ -1,4 +1,4 @@
-# Special thanks
+# Special thanks <3
 Project inspired by [jasminmif](https://github.com/jasminmif/react-interactive-paycard)
 # General info
 Interactive payment form created in React.
